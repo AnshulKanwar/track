@@ -1,27 +1,65 @@
 pub fn get_connection() -> sqlite::Connection {
-    let connection = sqlite::open("log.db").unwrap();
-    connection
+    let conn = sqlite::open("log.db").unwrap();
+    conn
 }
 
 pub fn initialize_db() {
-    let connection = get_connection();
-    create_table(connection);
+    let conn = get_connection();
+    create_tables(&conn);
 }
 
-fn create_table(connection: sqlite::Connection) {
-    connection
-        .execute(
-            "
-        CREATE TABLE log (
-            date INTEGER,
-            name TEXT,
+fn create_tables(conn: &sqlite::Connection) {
+    create_table_food(conn);
+    create_table_log(conn);
+    println!("Initialzed Database");
+}
+
+fn create_table_food(conn: &sqlite::Connection) {
+    conn.execute(
+        "
+        DROP TABLE IF EXISTS food;
+        ",
+    )
+    .unwrap();
+
+    conn.execute(
+        "
+        CREATE TABLE food (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL,
+            slug TEXT UNIQUE NOT NULL,
             calories INTEGER,
             carbohydrates REAL,
             fat REAL,
             protein REAL
-            serving REAL
         );
         ",
-        )
-        .unwrap();
+    )
+    .unwrap();
+}
+
+fn create_table_log(conn: &sqlite::Connection) {
+    conn.execute(
+        "
+        DROP TABLE IF EXISTS log;
+        ",
+    )
+    .unwrap();
+
+    conn.execute(
+        "
+        CREATE TABLE log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date INTEGER NOT NULL,
+            foodId INTEGER NOT NULL,
+            serving REAL NOT NULL,
+
+            FOREIGN KEY (foodId)
+                REFERENCES food (id)
+                ON UPDATE CASCADE
+                ON DELETE CASCADE
+        );
+        ",
+    )
+    .unwrap();
 }

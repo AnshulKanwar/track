@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
-use food::Food;
 use db::initialize_db;
+use food::get_food_id;
 use log::log;
 
 mod db;
@@ -24,7 +24,7 @@ enum Commands {
     },
 
     /// initialize database
-    Init
+    Init,
 }
 
 fn main() {
@@ -35,15 +35,13 @@ fn main() {
 fn run(cli: Cli) {
     match &cli.command {
         Some(Commands::Log { food, serving }) => {
-            let food_item = Food::new(food, *serving);
-            match food_item {
-                Some(f) => log(f),
-                None => println!("Food {} not found", food),
+            let food_id = get_food_id(food);
+            match food_id {
+                Ok(id) => log(id, *serving),
+                Err(e) => println!("Error: {e:?}"),
             }
         }
-        Some(Commands::Init) => {
-            initialize_db()
-        }
+        Some(Commands::Init) => initialize_db(),
         None => {}
     }
 }

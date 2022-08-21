@@ -1,23 +1,18 @@
-use crate::food::Food;
-use csv;
-use std::fs::{File, OpenOptions};
+use crate::db;
+use chrono::Utc;
 
-pub fn get_writer() -> csv::Writer<File> {
-    let log_file = OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open("log.csv")
-        .unwrap();
+pub fn log(food_id: u64, serving: f32) {
+    let conn = db::get_connection();
+    let date = Utc::now();
 
-    let wtr = csv::WriterBuilder::new()
-        .has_headers(false)
-        .from_writer(log_file);
-
-    wtr
-}
-
-pub fn log(food: Food) {
-    let mut wtr = get_writer();
-    wtr.serialize(&food).unwrap();
-    wtr.flush().unwrap();
+    conn.execute(format!(
+        "
+        INSERT INTO log (date, foodId, serving)
+        VALUES ({}, {}, {});
+        ",
+        date.timestamp(),
+        food_id,
+        serving
+    ))
+    .unwrap();
 }
