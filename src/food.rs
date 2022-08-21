@@ -1,6 +1,6 @@
-use serde::Serialize;
-use chrono::{DateTime, Utc};
 use chrono::serde::ts_seconds;
+use chrono::{DateTime, Utc};
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Food {
