@@ -1,3 +1,5 @@
+use std::fs;
+
 pub fn get_connection() -> sqlite::Connection {
     let conn = sqlite::open("log.db").unwrap();
     conn
@@ -36,6 +38,10 @@ fn create_table_food(conn: &sqlite::Connection) {
         ",
     )
     .unwrap();
+
+    let foodsQuery = fs::read_to_string("foods.sql").unwrap();
+    conn.execute(foodsQuery).unwrap();
+
 }
 
 fn create_table_log(conn: &sqlite::Connection) {
@@ -50,7 +56,7 @@ fn create_table_log(conn: &sqlite::Connection) {
         "
         CREATE TABLE log (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date INTEGER NOT NULL,
+            date DATE NOT NULL,
             foodId INTEGER NOT NULL,
             serving REAL NOT NULL,
 
