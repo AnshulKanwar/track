@@ -1,9 +1,9 @@
-use crate::db::get_connection;
+use crate::db;
 use sqlite::Value;
 
 // TODO: returning error
 pub fn get_food_id(slug: &str) -> Result<u64, &'static str> {
-    let conn = get_connection();
+    let conn = db::get_connection();
 
     let mut cursor = conn
         .prepare("SELECT id FROM food WHERE slug = ?")
