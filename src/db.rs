@@ -39,9 +39,8 @@ fn create_table_food(conn: &sqlite::Connection) {
     )
     .unwrap();
 
-    let foodsQuery = fs::read_to_string("foods.sql").unwrap();
-    conn.execute(foodsQuery).unwrap();
-
+    let foods_query = fs::read_to_string("foods.sql").unwrap();
+    conn.execute(foods_query).unwrap();
 }
 
 fn create_table_log(conn: &sqlite::Connection) {
