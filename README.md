@@ -1,6 +1,8 @@
 # Track
 A CLI app to track your diet.
 
+<img src="img/track.png" width="800" />
+
 # TODO
 - [ ] Add Error Handling
 - [ ] Colored Output
