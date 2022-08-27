@@ -1,7 +1,11 @@
-use std::fs;
+use crate::utils::get_track_directory;
 
 pub fn get_connection() -> sqlite::Connection {
-    let conn = sqlite::open("log.db").unwrap();
+    let track_dir = get_track_directory();
+
+    let db_path = format!("{}/log.db", track_dir);
+
+    let conn = sqlite::open(db_path).unwrap();
     conn
 }
 
@@ -39,8 +43,9 @@ fn create_table_food(conn: &sqlite::Connection) {
     )
     .unwrap();
 
-    let foods_query = fs::read_to_string("foods.sql").unwrap();
-    conn.execute(foods_query).unwrap();
+    let foods_sql = include_str!("foods.sql");
+
+    conn.execute(foods_sql).unwrap();
 }
 
 fn create_table_log(conn: &sqlite::Connection) {
