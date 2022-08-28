@@ -11,5 +11,5 @@ A CLI app to track your diet.
 - [ ] Add logging
 - [ ] Add styling for table
 - [ ] Add limits for calorie, fat etc.
-- [ ] Make `init` command implicit
+- [X] Make `init` command implicit
 - [ ] Merge `get_food_id()` and `log()`

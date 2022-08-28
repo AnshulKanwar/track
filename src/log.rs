@@ -1,4 +1,5 @@
 use crate::db;
+use crate::food::get_food_id;
 use crate::utils::parse_date_to_string;
 use chrono::{Date, Utc};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
@@ -24,7 +25,9 @@ impl Default for TotalFood {
     }
 }
 
-pub fn log(food_id: u64, serving: f32) {
+pub fn log(food: &str, serving: f32) {
+    let food_id = get_food_id(food).unwrap();
+
     let conn = db::get_connection();
     let date = Utc::today().format("%Y/%m/%d");
 

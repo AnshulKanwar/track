@@ -2,7 +2,6 @@ use chrono::{Date, Utc};
 use clap::{Parser, Subcommand};
 
 use db::initialize_db;
-use food::get_food_id;
 use log::{log, show_log};
 
 mod db;
@@ -44,11 +43,7 @@ fn main() {
 fn run(cli: Cli) {
     match &cli.command {
         Commands::Log { food, serving } => {
-            let food_id = get_food_id(food);
-            match food_id {
-                Ok(id) => log(id, *serving),
-                Err(e) => println!("Error: {e:?}"),
-            }
+            log(food, *serving);
         }
         Commands::Show { date } => {
             show_log(date);
